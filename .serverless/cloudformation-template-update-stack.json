@@ -1,0 +1,1531 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "S3ObjectCreatedEventFunctionLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/task-management-service-production-s3ObjectCreatedEventFunction"
+      }
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/task-management-service-production-v1_auth_google_authorize"
+      }
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/task-management-service-production-v1_auth_google_refresh"
+      }
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/task-management-service-production-v1_auth_google_revoke"
+      }
+    },
+    "V1UnderscorefileUnderscorelistLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/task-management-service-production-v1_file_list"
+      }
+    },
+    "V1UnderscorefileUnderscoreuploadLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/task-management-service-production-v1_file_upload"
+      }
+    },
+    "V1UnderscoretaskUnderscorecreateLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/task-management-service-production-v1_task_create"
+      }
+    },
+    "V1UnderscoretaskUnderscorelistLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/task-management-service-production-v1_task_list"
+      }
+    },
+    "V1UnderscoretaskUnderscoreupdateLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/task-management-service-production-v1_task_update"
+      }
+    },
+    "IamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "task-management-service",
+                  "production",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup",
+                    "logs:TagResource"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/task-management-service-production*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/task-management-service-production*:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "TMSSystemTable",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "task-management-service",
+              "production",
+              {
+                "Ref": "AWS::Region"
+              },
+              "lambdaRole"
+            ]
+          ]
+        }
+      }
+    },
+    "S3ObjectCreatedEventFunctionLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "task-management-service-production-deployment-bucket",
+          "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+        },
+        "Handler": "dist/lambda/event/s3-object-created.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "task-management-service-production-s3ObjectCreatedEventFunction",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "stage": "production"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "S3ObjectCreatedEventFunctionLogGroup"
+      ]
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "task-management-service-production-deployment-bucket",
+          "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+        },
+        "Handler": "dist/routes/v1/auth/google/authorize.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "task-management-service-production-v1_auth_google_authorize",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "stage": "production"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLogGroup"
+      ]
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "task-management-service-production-deployment-bucket",
+          "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+        },
+        "Handler": "dist/routes/v1/auth/google/refresh.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "task-management-service-production-v1_auth_google_refresh",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "stage": "production"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLogGroup"
+      ]
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "task-management-service-production-deployment-bucket",
+          "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+        },
+        "Handler": "dist/routes/v1/auth/google/revoke.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "task-management-service-production-v1_auth_google_revoke",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "stage": "production"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLogGroup"
+      ]
+    },
+    "V1UnderscorefileUnderscorelistLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "task-management-service-production-deployment-bucket",
+          "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+        },
+        "Handler": "dist/routes/v1/file/list.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "task-management-service-production-v1_file_list",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "stage": "production"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "V1UnderscorefileUnderscorelistLogGroup"
+      ]
+    },
+    "V1UnderscorefileUnderscoreuploadLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "task-management-service-production-deployment-bucket",
+          "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+        },
+        "Handler": "dist/routes/v1/file/upload.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "task-management-service-production-v1_file_upload",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "stage": "production"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "V1UnderscorefileUnderscoreuploadLogGroup"
+      ]
+    },
+    "V1UnderscoretaskUnderscorecreateLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "task-management-service-production-deployment-bucket",
+          "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+        },
+        "Handler": "dist/routes/v1/task/create.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "task-management-service-production-v1_task_create",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "stage": "production"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "V1UnderscoretaskUnderscorecreateLogGroup"
+      ]
+    },
+    "V1UnderscoretaskUnderscorelistLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "task-management-service-production-deployment-bucket",
+          "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+        },
+        "Handler": "dist/routes/v1/task/list.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "task-management-service-production-v1_task_list",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "stage": "production"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "V1UnderscoretaskUnderscorelistLogGroup"
+      ]
+    },
+    "V1UnderscoretaskUnderscoreupdateLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "task-management-service-production-deployment-bucket",
+          "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+        },
+        "Handler": "dist/routes/v1/task/update.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "task-management-service-production-v1_task_update",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "stage": "production"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "V1UnderscoretaskUnderscoreupdateLogGroup"
+      ]
+    },
+    "S3ObjectCreatedEventFunctionLambdaVersionCemCsN80RFtRhYLfRdkm1QoY6p4GBBeHnxjegyOLQA": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "S3ObjectCreatedEventFunctionLambdaFunction"
+        },
+        "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+      }
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaVersioncqsRXEjirPDrINMfCSPckfmGLvoHPXDTRZNXBREZc": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaFunction"
+        },
+        "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+      }
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaVersionSYtU4820K8K9GKxDwQIcyFJgjPOdTkYekpQjX7k": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaFunction"
+        },
+        "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+      }
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaVersionKqiAkNRl3xYw9GN7gRVJX27RO04ZYm3koEN0mE8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaFunction"
+        },
+        "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+      }
+    },
+    "V1UnderscorefileUnderscorelistLambdaVersionoCVDWb8pz4APtE2XOKRJP7u3UaNtJDvOtVJOQp62xA": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "V1UnderscorefileUnderscorelistLambdaFunction"
+        },
+        "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+      }
+    },
+    "V1UnderscorefileUnderscoreuploadLambdaVersionHJJZ1bEyEhiSofwZMXNBWLlyPD4Ui9yyo5VWdKEU": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "V1UnderscorefileUnderscoreuploadLambdaFunction"
+        },
+        "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+      }
+    },
+    "V1UnderscoretaskUnderscorecreateLambdaVersionqqPqzoD9zYpvtGUdHItGArbgQ9zHjFGcy8luy3Tv0QE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "V1UnderscoretaskUnderscorecreateLambdaFunction"
+        },
+        "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+      }
+    },
+    "V1UnderscoretaskUnderscorelistLambdaVersionjH4YYpgddMzwVt709UlWmDlsXmd4MXigpR2iPtpyWmg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "V1UnderscoretaskUnderscorelistLambdaFunction"
+        },
+        "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+      }
+    },
+    "V1UnderscoretaskUnderscoreupdateLambdaVersionXWwESqJPAIgdjhPEyhRmc1k57G56IquZobYkQCJRI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "V1UnderscoretaskUnderscoreupdateLambdaFunction"
+        },
+        "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+      }
+    },
+    "S3ObjectCreatedEventFunctionCustomS31": {
+      "Type": "Custom::S3",
+      "Version": 1,
+      "DependsOn": [
+        "S3ObjectCreatedEventFunctionLambdaFunction",
+        "CustomDashresourceDashexistingDashs3LambdaFunction"
+      ],
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomDashresourceDashexistingDashs3LambdaFunction",
+            "Arn"
+          ]
+        },
+        "FunctionName": "task-management-service-production-s3ObjectCreatedEventFunction",
+        "BucketName": {
+          "Ref": "FileInventoryBucket"
+        },
+        "BucketConfigs": [
+          {
+            "Event": "s3:ObjectCreated:*",
+            "Rules": []
+          }
+        ]
+      }
+    },
+    "IamRoleCustomResourcesLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "production",
+                  "task-management-service",
+                  "custom-resources-lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      ":",
+                      [
+                        "arn",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        "s3",
+                        "",
+                        "",
+                        {
+                          "Ref": "FileInventoryBucket"
+                        }
+                      ]
+                    ]
+                  },
+                  "Action": [
+                    "s3:PutBucketNotification",
+                    "s3:GetBucketNotification"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      ":",
+                      [
+                        "arn",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        "lambda",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        "function",
+                        "*"
+                      ]
+                    ]
+                  },
+                  "Action": [
+                    "lambda:AddPermission",
+                    "lambda:RemovePermission"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "CustomDashresourceDashexistingDashs3LambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "task-management-service-production-deployment-bucket",
+          "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/custom-resources.zip"
+        },
+        "FunctionName": "task-management-service-production-custom-resource-existing-s3",
+        "Handler": "s3/handler.handler",
+        "MemorySize": 1024,
+        "Runtime": "nodejs16.x",
+        "Timeout": 180,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleCustomResourcesLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "IamRoleCustomResourcesLambdaExecution"
+      ]
+    },
+    "HttpApi": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": "production-task-management-service",
+        "ProtocolType": "HTTP",
+        "CorsConfiguration": {
+          "AllowHeaders": [
+            "Content-Type",
+            "X-Amz-Date",
+            "Authorization",
+            "X-Api-Key",
+            "X-Amz-Security-Token",
+            "X-Amz-User-Agent",
+            "X-Amzn-Trace-Id"
+          ],
+          "AllowMethods": [
+            "OPTIONS",
+            "POST",
+            "GET",
+            "PUT"
+          ],
+          "AllowOrigins": [
+            "*"
+          ]
+        }
+      }
+    },
+    "HttpApiStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "StageName": "$default",
+        "AutoDeploy": true,
+        "DefaultRouteSettings": {
+          "DetailedMetricsEnabled": false
+        }
+      }
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationV1UnderscoreauthUnderscoregoogleUnderscoreauthorize": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostV1AuthGoogleAuthorize": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /v1/auth/google/authorize",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationV1UnderscoreauthUnderscoregoogleUnderscoreauthorize"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationV1UnderscoreauthUnderscoregoogleUnderscoreauthorize"
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationV1UnderscoreauthUnderscoregoogleUnderscorerefresh": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostV1AuthGoogleRefresh": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /v1/auth/google/refresh",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationV1UnderscoreauthUnderscoregoogleUnderscorerefresh"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationV1UnderscoreauthUnderscoregoogleUnderscorerefresh"
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationV1UnderscoreauthUnderscoregoogleUnderscorerevoke": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostV1AuthGoogleRevoke": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /v1/auth/google/revoke",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationV1UnderscoreauthUnderscoregoogleUnderscorerevoke"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationV1UnderscoreauthUnderscoregoogleUnderscorerevoke"
+    },
+    "V1UnderscorefileUnderscorelistLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "V1UnderscorefileUnderscorelistLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationV1UnderscorefileUnderscorelist": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "V1UnderscorefileUnderscorelistLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetV1Files": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /v1/files",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationV1UnderscorefileUnderscorelist"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationV1UnderscorefileUnderscorelist"
+    },
+    "V1UnderscorefileUnderscoreuploadLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "V1UnderscorefileUnderscoreuploadLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationV1UnderscorefileUnderscoreupload": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "V1UnderscorefileUnderscoreuploadLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostV1FilesUpload": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /v1/files/upload",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationV1UnderscorefileUnderscoreupload"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationV1UnderscorefileUnderscoreupload"
+    },
+    "V1UnderscoretaskUnderscorecreateLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "V1UnderscoretaskUnderscorecreateLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationV1UnderscoretaskUnderscorecreate": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "V1UnderscoretaskUnderscorecreateLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostV1Tasks": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /v1/tasks",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationV1UnderscoretaskUnderscorecreate"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationV1UnderscoretaskUnderscorecreate"
+    },
+    "V1UnderscoretaskUnderscorelistLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "V1UnderscoretaskUnderscorelistLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationV1UnderscoretaskUnderscorelist": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "V1UnderscoretaskUnderscorelistLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetV1Tasks": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /v1/tasks",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationV1UnderscoretaskUnderscorelist"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationV1UnderscoretaskUnderscorelist"
+    },
+    "V1UnderscoretaskUnderscoreupdateLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "V1UnderscoretaskUnderscoreupdateLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationV1UnderscoretaskUnderscoreupdate": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "V1UnderscoretaskUnderscoreupdateLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePutV1TasksTaskidVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "PUT /v1/tasks/{taskId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationV1UnderscoretaskUnderscoreupdate"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationV1UnderscoretaskUnderscoreupdate"
+    },
+    "TMSSystemTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "TMSSystemTable",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "pk",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "sk",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "entity_type",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "status",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "due_date",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "pk",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "sk",
+            "KeyType": "RANGE"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        },
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "statusIndex",
+            "KeySchema": [
+              {
+                "AttributeName": "pk",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "status",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 5,
+              "WriteCapacityUnits": 5
+            }
+          },
+          {
+            "IndexName": "dueDateIndex",
+            "KeySchema": [
+              {
+                "AttributeName": "pk",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "due_date",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 5,
+              "WriteCapacityUnits": 5
+            }
+          },
+          {
+            "IndexName": "EntityTypeIndex",
+            "KeySchema": [
+              {
+                "AttributeName": "pk",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "entity_type",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 5,
+              "WriteCapacityUnits": 5
+            }
+          }
+        ]
+      }
+    },
+    "FileInventoryBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "file-inventory-bucket-yaho",
+        "AccessControl": "Private",
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "Id": "DeleteOldFiles",
+              "Status": "Enabled",
+              "ExpirationInDays": 30
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": "task-management-service-production-deployment-bucket",
+      "Export": {
+        "Name": "sls-task-management-service-production-ServerlessDeploymentBucketName"
+      }
+    },
+    "S3ObjectCreatedEventFunctionLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "S3ObjectCreatedEventFunctionLambdaVersionCemCsN80RFtRhYLfRdkm1QoY6p4GBBeHnxjegyOLQA"
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-S3ObjectCreatedEventFunctionLambdaFunctionQualifiedArn"
+      }
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaVersioncqsRXEjirPDrINMfCSPckfmGLvoHPXDTRZNXBREZc"
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaFunctionQualifiedArn"
+      }
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaVersionSYtU4820K8K9GKxDwQIcyFJgjPOdTkYekpQjX7k"
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaFunctionQualifiedArn"
+      }
+    },
+    "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaVersionKqiAkNRl3xYw9GN7gRVJX27RO04ZYm3koEN0mE8"
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaFunctionQualifiedArn"
+      }
+    },
+    "V1UnderscorefileUnderscorelistLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "V1UnderscorefileUnderscorelistLambdaVersionoCVDWb8pz4APtE2XOKRJP7u3UaNtJDvOtVJOQp62xA"
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-V1UnderscorefileUnderscorelistLambdaFunctionQualifiedArn"
+      }
+    },
+    "V1UnderscorefileUnderscoreuploadLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "V1UnderscorefileUnderscoreuploadLambdaVersionHJJZ1bEyEhiSofwZMXNBWLlyPD4Ui9yyo5VWdKEU"
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-V1UnderscorefileUnderscoreuploadLambdaFunctionQualifiedArn"
+      }
+    },
+    "V1UnderscoretaskUnderscorecreateLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "V1UnderscoretaskUnderscorecreateLambdaVersionqqPqzoD9zYpvtGUdHItGArbgQ9zHjFGcy8luy3Tv0QE"
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-V1UnderscoretaskUnderscorecreateLambdaFunctionQualifiedArn"
+      }
+    },
+    "V1UnderscoretaskUnderscorelistLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "V1UnderscoretaskUnderscorelistLambdaVersionjH4YYpgddMzwVt709UlWmDlsXmd4MXigpR2iPtpyWmg"
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-V1UnderscoretaskUnderscorelistLambdaFunctionQualifiedArn"
+      }
+    },
+    "V1UnderscoretaskUnderscoreupdateLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "V1UnderscoretaskUnderscoreupdateLambdaVersionXWwESqJPAIgdjhPEyhRmc1k57G56IquZobYkQCJRI"
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-V1UnderscoretaskUnderscoreupdateLambdaFunctionQualifiedArn"
+      }
+    },
+    "HttpApiId": {
+      "Description": "Id of the HTTP API",
+      "Value": {
+        "Ref": "HttpApi"
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-HttpApiId"
+      }
+    },
+    "HttpApiUrl": {
+      "Description": "URL of the HTTP API",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "HttpApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            }
+          ]
+        ]
+      },
+      "Export": {
+        "Name": "sls-task-management-service-production-HttpApiUrl"
+      }
+    }
+  }
+}

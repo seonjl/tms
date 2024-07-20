@@ -1,0 +1,173 @@
+service: task-management-service
+frameworkVersion: "3"
+
+package:
+  # individually: true
+  excludeDevDependencies: true
+  exclude:
+    - src/**
+    - .jest/**
+    - node_modules/.pnpm/**
+
+plugins:
+  - serverless-deployment-bucket
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'dev'}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [TMSSystemTable, Arn]
+  environment:
+    stage: ${opt:stage, self:provider.stage}
+  httpApi:
+    cors: true
+  deploymentBucket:
+    name: ${self:service}-${self:provider.stage}-deployment-bucket
+    blockPublicAccess: true
+
+resources:
+  Resources:
+    TMSSystemTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "TMSSystemTable"
+        AttributeDefinitions:
+          - AttributeName: "pk"
+            AttributeType: "S"
+          - AttributeName: "sk"
+            AttributeType: "S"
+          - AttributeName: "entity_type"
+            AttributeType: "S"
+          - AttributeName: "status"
+            AttributeType: "S"
+          - AttributeName: "due_date"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "pk"
+            KeyType: "HASH"
+          - AttributeName: "sk"
+            KeyType: "RANGE"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        GlobalSecondaryIndexes:
+          - IndexName: "statusIndex"
+            KeySchema:
+              - AttributeName: "pk"
+                KeyType: "HASH"
+              - AttributeName: "status"
+                KeyType: "RANGE"
+            Projection:
+              ProjectionType: "ALL"
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5
+          - IndexName: "dueDateIndex"
+            KeySchema:
+              - AttributeName: "pk"
+                KeyType: "HASH"
+              - AttributeName: "due_date"
+                KeyType: "RANGE"
+            Projection:
+              ProjectionType: "ALL"
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5
+          - IndexName: "EntityTypeIndex"
+            KeySchema:
+              - AttributeName: "pk"
+                KeyType: "HASH"
+              - AttributeName: "entity_type"
+                KeyType: "RANGE"
+            Projection:
+              ProjectionType: "ALL"
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5
+
+    FileInventoryBucket:
+      Type: "AWS::S3::Bucket"
+      Properties:
+        BucketName: "file-inventory-bucket-yaho"
+        AccessControl: "Private"
+        VersioningConfiguration:
+          Status: "Enabled"
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+        LifecycleConfiguration:
+          Rules:
+            - Id: "DeleteOldFiles"
+              Status: "Enabled"
+              ExpirationInDays: 30 # 30일 후 파일 삭제
+
+functions:
+  s3ObjectCreatedEventFunction:
+    handler: dist/lambda/event/s3-object-created.handler
+    events:
+      - s3:
+          bucket: !Ref FileInventoryBucket
+          event: s3:ObjectCreated:*
+          existing: true
+  v1_auth_google_authorize:
+    handler: dist/routes/v1/auth/google/authorize.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /v1/auth/google/authorize
+  v1_auth_google_refresh:
+    handler: dist/routes/v1/auth/google/refresh.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /v1/auth/google/refresh
+  v1_auth_google_revoke:
+    handler: dist/routes/v1/auth/google/revoke.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /v1/auth/google/revoke
+  v1_file_list:
+    handler: dist/routes/v1/file/list.handler
+    events:
+      - httpApi:
+          method: GET
+          path: /v1/files
+  v1_file_upload:
+    handler: dist/routes/v1/file/upload.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /v1/files/upload
+  v1_task_create:
+    handler: dist/routes/v1/task/create.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /v1/tasks
+  v1_task_list:
+    handler: dist/routes/v1/task/list.handler
+    events:
+      - httpApi:
+          method: GET
+          path: /v1/tasks
+  v1_task_update:
+    handler: dist/routes/v1/task/update.handler
+    events:
+      - httpApi:
+          method: PUT
+          path: /v1/tasks/{taskId}
