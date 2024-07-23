@@ -1,10 +1,10 @@
 import middy from "@middy/core";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
 import { FromSchema } from "json-schema-to-ts";
-import { FileRepository } from "../../../../ddb/file.repository.js";
+import { getDownloadPresignedUrl } from "../../../../lib/aws/s3.service.js";
+import { FileRepository } from "../../../../lib/ddb/file.repository.js";
 import { globalErrorHandler } from "../../../../lib/middlewares/global-error-handler.js";
 import { userFriendlyValidator } from "../../../../lib/middlewares/user-friendly.validator.js";
-import { getDownloadPresignedUrl } from "../../../../lib/s3/s3.service.js";
 import { randomId, requestContextSchema } from "../../../../lib/util/index.js";
 
 const bodySchema = {

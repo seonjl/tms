@@ -1,0 +1,25 @@
+
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <link rel="icon" type="image/svg+xml" href="https://reco.metarecon.ai/favicon.ico"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>RECONLabs API Docs</title>
+      <!-- Embed elements Elements via Web Component -->
+      <script src="https://unpkg.com/@stoplight/elements/web-components.min.js"></script>
+      <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements/styles.min.css">
+    </head>
+    <body>
+      <elements-api id="docs" router="hash" layout="sidebar"></elements-api>
+      <script>
+      (async () => {
+        const docs = document.getElementById('docs');
+        const apiDescriptionDocument = "openapi: 3.1.0\ninfo:\n  title: API Documentation\n  version: 1.0.0\npaths:\n  /v1/files/download:\n    POST:\n      tags:\n        - File\n      summary: File.download\n      description: Create a presigned url for download\n      operationId: operation.2nvvjtk25v\n      requestBody:\n        required: true\n        content:\n          application/json:\n            schema:\n              type: object\n              properties:\n                name:\n                  type: string\n                metadata:\n                  type: object\n                  additionalProperties:\n                    type: string\n              required:\n                - name\n              additionalProperties: false\n      responses:\n        '200':\n          description: ''\n          content:\n            application/json:\n              schema:\n                type: object\n                properties:\n                  url:\n                    type: string\n";
+      
+        docs.apiDescriptionDocument = apiDescriptionDocument;
+      })();
+      </script>
+
+    </body>
+  </html>

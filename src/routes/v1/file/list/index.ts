@@ -1,7 +1,7 @@
 import middy from "@middy/core";
 import httpErrorHandler from "@middy/http-error-handler";
 import { FromSchema } from "json-schema-to-ts";
-import { FileRepository } from "../../../../ddb/file.repository.js";
+import { FileRepository } from "../../../../lib/ddb/file.repository.js";
 import { userFriendlyValidator } from "../../../../lib/middlewares/user-friendly.validator.js";
 import { requestContextSchema } from "../../../../lib/util/index.js";
 

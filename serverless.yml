@@ -8,6 +8,14 @@ package:
     - src/**
     - .jest/**
     - node_modules/.pnpm/**
+    - scripts/**
+    - .eslintrc.yaml
+    - .gitignore
+    - jest.config.ts
+    - makefile
+    - readme.md
+    - tsconfig.json
+    - yarn.lock
 
 plugins:
   - serverless-deployment-bucket
@@ -96,6 +104,8 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 5
               WriteCapacityUnits: 5
+        StreamSpecification:
+          StreamViewType: "NEW_IMAGE"
 
     FileInventoryBucket:
       Type: "AWS::S3::Bucket"
@@ -114,6 +124,15 @@ resources:
             - Id: "DeleteOldFiles"
               Status: "Enabled"
               ExpirationInDays: 30 # 30일 후 파일 삭제
+
+    TaskNotificationTopic:
+      Type: "AWS::SNS::Topic"
+      Properties:
+        TopicName: "task-notification-topic"
+        DisplayName: "Task Notification Topic"
+        Subscription:
+          - Endpoint: "roy@reconlabs.ai"
+            Protocol: "email"
 
 functions:
   s3ObjectCreatedEventFunction:
@@ -171,3 +190,17 @@ functions:
       - httpApi:
           method: PUT
           path: /v1/tasks/{taskId}
+  internal_docs:
+    handler: dist/routes/internal/docs.handler
+    events:
+      - httpApi:
+          method: GET
+          path: /internal/docs
+  internal_health:
+    handler: dist/routes/internal/health.handler
+    events:
+      - httpApi:
+          method: GET
+          path: /internal/health
+  NotificationLambda:
+    handler: dist/lambda/stream/ddb-record-changed.handler

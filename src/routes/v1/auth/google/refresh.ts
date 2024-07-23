@@ -2,10 +2,10 @@ import middy from "@middy/core";
 import { default as httpJsonBodyParser } from "@middy/http-json-body-parser";
 import { APIGatewayProxyResult } from "aws-lambda";
 import { FromSchema } from "json-schema-to-ts";
-import { refreshTokenByGoogle } from "../../../../lib/google/oauth.service";
-import { ApiKeyVerifiedContext } from "../../../../lib/middlewares/auth.guard";
-import { globalErrorHandler } from "../../../../lib/middlewares/global-error-handler";
-import { userFriendlyValidator } from "../../../../lib/middlewares/user-friendly.validator";
+import { refreshTokenByGoogle } from "../../../../lib/google/oauth.service.js";
+import { ApiKeyVerifiedContext } from "../../../../lib/middlewares/auth.guard.js";
+import { globalErrorHandler } from "../../../../lib/middlewares/global-error-handler.js";
+import { userFriendlyValidator } from "../../../../lib/middlewares/user-friendly.validator.js";
 
 // prettier-ignore
 const bodySchema = {

@@ -5,10 +5,10 @@ import { FromSchema } from "json-schema-to-ts";
 import {
   authorizeByGoogle,
   getUserInfoByGoogle,
-} from "../../../../lib/google/oauth.service";
-import { ApiKeyVerifiedContext } from "../../../../lib/middlewares/auth.guard";
-import { globalErrorHandler } from "../../../../lib/middlewares/global-error-handler";
-import { userFriendlyValidator } from "../../../../lib/middlewares/user-friendly.validator";
+} from "../../../../lib/google/oauth.service.js";
+import { ApiKeyVerifiedContext } from "../../../../lib/middlewares/auth.guard.js";
+import { globalErrorHandler } from "../../../../lib/middlewares/global-error-handler.js";
+import { userFriendlyValidator } from "../../../../lib/middlewares/user-friendly.validator.js";
 
 const bodySchema = {
   type: "object",

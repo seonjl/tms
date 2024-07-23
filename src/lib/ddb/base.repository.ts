@@ -1,5 +1,9 @@
 // Importing necessary modules from AWS SDK
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+  DynamoDBClient,
+  QueryCommand,
+  QueryCommandInput,
+} from "@aws-sdk/client-dynamodb";
 import {
   DeleteCommand,
   DeleteCommandInput,
@@ -8,12 +12,10 @@ import {
   GetCommandInput,
   PutCommand,
   PutCommandInput,
-  QueryCommand,
-  QueryCommandInput,
   UpdateCommand,
   UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";
-import { removeUndefined } from "../lib/util/index.js";
+import { removeUndefined } from "../util/index.js";
 interface ItemKey {
   [key: string]: any;
 }

@@ -1,4 +1,4 @@
-import { FileRepository } from "../../ddb/file.repository.js";
+import { FileRepository } from "../../lib/ddb/file.repository.js";
 
 type TEvent = {
   Records: [

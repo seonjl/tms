@@ -104,6 +104,24 @@
               "LogGroupName": "/aws/lambda/task-management-service-production-v1_task_update"
             }
           },
+          "InternalUnderscoredocsLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/task-management-service-production-internal_docs"
+            }
+          },
+          "InternalUnderscorehealthLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/task-management-service-production-internal_health"
+            }
+          },
+          "NotificationLambdaLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/task-management-service-production-NotificationLambda"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -190,7 +208,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "task-management-service-production-deployment-bucket",
-                "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
               },
               "Handler": "dist/lambda/event/s3-object-created.handler",
               "Runtime": "nodejs20.x",
@@ -218,7 +236,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "task-management-service-production-deployment-bucket",
-                "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
               },
               "Handler": "dist/routes/v1/auth/google/authorize.handler",
               "Runtime": "nodejs20.x",
@@ -246,7 +264,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "task-management-service-production-deployment-bucket",
-                "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
               },
               "Handler": "dist/routes/v1/auth/google/refresh.handler",
               "Runtime": "nodejs20.x",
@@ -274,7 +292,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "task-management-service-production-deployment-bucket",
-                "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
               },
               "Handler": "dist/routes/v1/auth/google/revoke.handler",
               "Runtime": "nodejs20.x",
@@ -302,7 +320,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "task-management-service-production-deployment-bucket",
-                "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
               },
               "Handler": "dist/routes/v1/file/list.handler",
               "Runtime": "nodejs20.x",
@@ -330,7 +348,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "task-management-service-production-deployment-bucket",
-                "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
               },
               "Handler": "dist/routes/v1/file/upload.handler",
               "Runtime": "nodejs20.x",
@@ -358,7 +376,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "task-management-service-production-deployment-bucket",
-                "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
               },
               "Handler": "dist/routes/v1/task/create.handler",
               "Runtime": "nodejs20.x",
@@ -386,7 +404,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "task-management-service-production-deployment-bucket",
-                "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
               },
               "Handler": "dist/routes/v1/task/list.handler",
               "Runtime": "nodejs20.x",
@@ -414,7 +432,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "task-management-service-production-deployment-bucket",
-                "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/task-management-service.zip"
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
               },
               "Handler": "dist/routes/v1/task/update.handler",
               "Runtime": "nodejs20.x",
@@ -437,94 +455,208 @@
               "V1UnderscoretaskUnderscoreupdateLogGroup"
             ]
           },
-          "S3ObjectCreatedEventFunctionLambdaVersionCemCsN80RFtRhYLfRdkm1QoY6p4GBBeHnxjegyOLQA": {
+          "InternalUnderscoredocsLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "task-management-service-production-deployment-bucket",
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
+              },
+              "Handler": "dist/routes/internal/docs.handler",
+              "Runtime": "nodejs20.x",
+              "FunctionName": "task-management-service-production-internal_docs",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "stage": "production"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "InternalUnderscoredocsLogGroup"
+            ]
+          },
+          "InternalUnderscorehealthLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "task-management-service-production-deployment-bucket",
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
+              },
+              "Handler": "dist/routes/internal/health.handler",
+              "Runtime": "nodejs20.x",
+              "FunctionName": "task-management-service-production-internal_health",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "stage": "production"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "InternalUnderscorehealthLogGroup"
+            ]
+          },
+          "NotificationLambdaLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "task-management-service-production-deployment-bucket",
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/task-management-service.zip"
+              },
+              "Handler": "dist/lambda/stream/ddb-record-changed.handler",
+              "Runtime": "nodejs20.x",
+              "FunctionName": "task-management-service-production-NotificationLambda",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "stage": "production"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "NotificationLambdaLogGroup"
+            ]
+          },
+          "S3ObjectCreatedEventFunctionLambdaVersion2XwKBCfjOPiTKz2lEwbapxjn1dH0cZrgkIPXAI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "S3ObjectCreatedEventFunctionLambdaFunction"
               },
-              "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
             }
           },
-          "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaVersioncqsRXEjirPDrINMfCSPckfmGLvoHPXDTRZNXBREZc": {
+          "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaVersionO0rmlDURUMpBUWDFGtUZpeuPFwZJGiJmKB2zRH2UA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaFunction"
               },
-              "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
             }
           },
-          "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaVersionSYtU4820K8K9GKxDwQIcyFJgjPOdTkYekpQjX7k": {
+          "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaVersionwE0S9e2PPRbk9dhCBkTHlywcANUnYzk7mNMFo0qBEE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaFunction"
               },
-              "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
             }
           },
-          "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaVersionKqiAkNRl3xYw9GN7gRVJX27RO04ZYm3koEN0mE8": {
+          "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaVersionmsukXK4Po2CrhD5E6RT3FJPu7Pnz6P70gaxau0Uo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaFunction"
               },
-              "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
             }
           },
-          "V1UnderscorefileUnderscorelistLambdaVersionoCVDWb8pz4APtE2XOKRJP7u3UaNtJDvOtVJOQp62xA": {
+          "V1UnderscorefileUnderscorelistLambdaVersiond0Q3b5G1rBquPP1y3USPo61UHYTfvkZwwy9Fcty1j5I": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "V1UnderscorefileUnderscorelistLambdaFunction"
               },
-              "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
             }
           },
-          "V1UnderscorefileUnderscoreuploadLambdaVersionHJJZ1bEyEhiSofwZMXNBWLlyPD4Ui9yyo5VWdKEU": {
+          "V1UnderscorefileUnderscoreuploadLambdaVersion0yrwzpO6DWxmFl4jy6WblAvygLbklKQABqUvx9eiio": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "V1UnderscorefileUnderscoreuploadLambdaFunction"
               },
-              "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
             }
           },
-          "V1UnderscoretaskUnderscorecreateLambdaVersionqqPqzoD9zYpvtGUdHItGArbgQ9zHjFGcy8luy3Tv0QE": {
+          "V1UnderscoretaskUnderscorecreateLambdaVersion4sKTOk0ctCl0vyAvBjxxnlr9eQnFYNbX6OmMivRV2dE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "V1UnderscoretaskUnderscorecreateLambdaFunction"
               },
-              "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
             }
           },
-          "V1UnderscoretaskUnderscorelistLambdaVersionjH4YYpgddMzwVt709UlWmDlsXmd4MXigpR2iPtpyWmg": {
+          "V1UnderscoretaskUnderscorelistLambdaVersion5R5omzhtwMeU3pVznQqE6hiHWeh4rsetwAEeGyY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "V1UnderscoretaskUnderscorelistLambdaFunction"
               },
-              "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
             }
           },
-          "V1UnderscoretaskUnderscoreupdateLambdaVersionXWwESqJPAIgdjhPEyhRmc1k57G56IquZobYkQCJRI": {
+          "V1UnderscoretaskUnderscoreupdateLambdaVersionwOcNfYKZ8BCJuFigT5EElb4a95De93P5DvNIHw1B4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "V1UnderscoretaskUnderscoreupdateLambdaFunction"
               },
-              "CodeSha256": "ZaGFA4+HDVzRMmXZU+VedtWWRlGAQPub0GDRmc1ZAFo="
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
+            }
+          },
+          "InternalUnderscoredocsLambdaVersiondBeGPbeBpXh6msyKRiVZEWB94q0Gb4YkNiwZi6ulJMg": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "InternalUnderscoredocsLambdaFunction"
+              },
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
+            }
+          },
+          "InternalUnderscorehealthLambdaVersioneIDxMSouOegMSnfwevbrM1Iy23JTGhVL8mEQxv7EU": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "InternalUnderscorehealthLambdaFunction"
+              },
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
+            }
+          },
+          "NotificationLambdaLambdaVersionpt2iBV4OP2JfmBg32kkHNHtWDDxDyMK4HypWShto": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "NotificationLambdaLambdaFunction"
+              },
+              "CodeSha256": "1hv9GYgWx+QnZsUAs0z6huKU0h/L+eUt5s4EgKqkrKM="
             }
           },
           "S3ObjectCreatedEventFunctionCustomS31": {
@@ -649,7 +781,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "task-management-service-production-deployment-bucket",
-                "S3Key": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z/custom-resources.zip"
+                "S3Key": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z/custom-resources.zip"
               },
               "FunctionName": "task-management-service-production-custom-resource-existing-s3",
               "Handler": "s3/handler.handler",
@@ -1283,6 +1415,150 @@
             },
             "DependsOn": "HttpApiIntegrationV1UnderscoretaskUnderscoreupdate"
           },
+          "InternalUnderscoredocsLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "InternalUnderscoredocsLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationInternalUnderscoredocs": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"InternalUnderscoredocsLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetInternalDocs": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /internal/docs",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationInternalUnderscoredocs"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationInternalUnderscoredocs"
+          },
+          "InternalUnderscorehealthLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "InternalUnderscorehealthLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationInternalUnderscorehealth": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"InternalUnderscorehealthLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetInternalHealth": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /internal/health",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationInternalUnderscorehealth"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationInternalUnderscorehealth"
+          },
           "TMSSystemTable": {
             "Type": "AWS::DynamoDB::Table",
             "Properties": {
@@ -1384,7 +1660,10 @@
                     "WriteCapacityUnits": 5
                   }
                 }
-              ]
+              ],
+              "StreamSpecification": {
+                "StreamViewType": "NEW_IMAGE"
+              }
             }
           },
           "FileInventoryBucket": {
@@ -1411,6 +1690,19 @@
                 ]
               }
             }
+          },
+          "TaskNotificationTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+              "TopicName": "task-notification-topic",
+              "DisplayName": "Task Notification Topic",
+              "Subscription": [
+                {
+                  "Endpoint": "roy@reconlabs.ai",
+                  "Protocol": "email"
+                }
+              ]
+            }
           }
         },
         "Outputs": {
@@ -1423,7 +1715,7 @@
           "S3ObjectCreatedEventFunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "S3ObjectCreatedEventFunctionLambdaVersionCemCsN80RFtRhYLfRdkm1QoY6p4GBBeHnxjegyOLQA"
+              "Ref": "S3ObjectCreatedEventFunctionLambdaVersion2XwKBCfjOPiTKz2lEwbapxjn1dH0cZrgkIPXAI"
             },
             "Export": {
               "Name": "sls-task-management-service-production-S3ObjectCreatedEventFunctionLambdaFunctionQualifiedArn"
@@ -1432,7 +1724,7 @@
           "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaVersioncqsRXEjirPDrINMfCSPckfmGLvoHPXDTRZNXBREZc"
+              "Ref": "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaVersionO0rmlDURUMpBUWDFGtUZpeuPFwZJGiJmKB2zRH2UA"
             },
             "Export": {
               "Name": "sls-task-management-service-production-V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaFunctionQualifiedArn"
@@ -1441,7 +1733,7 @@
           "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaVersionSYtU4820K8K9GKxDwQIcyFJgjPOdTkYekpQjX7k"
+              "Ref": "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaVersionwE0S9e2PPRbk9dhCBkTHlywcANUnYzk7mNMFo0qBEE"
             },
             "Export": {
               "Name": "sls-task-management-service-production-V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaFunctionQualifiedArn"
@@ -1450,7 +1742,7 @@
           "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaVersionKqiAkNRl3xYw9GN7gRVJX27RO04ZYm3koEN0mE8"
+              "Ref": "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaVersionmsukXK4Po2CrhD5E6RT3FJPu7Pnz6P70gaxau0Uo"
             },
             "Export": {
               "Name": "sls-task-management-service-production-V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaFunctionQualifiedArn"
@@ -1459,7 +1751,7 @@
           "V1UnderscorefileUnderscorelistLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "V1UnderscorefileUnderscorelistLambdaVersionoCVDWb8pz4APtE2XOKRJP7u3UaNtJDvOtVJOQp62xA"
+              "Ref": "V1UnderscorefileUnderscorelistLambdaVersiond0Q3b5G1rBquPP1y3USPo61UHYTfvkZwwy9Fcty1j5I"
             },
             "Export": {
               "Name": "sls-task-management-service-production-V1UnderscorefileUnderscorelistLambdaFunctionQualifiedArn"
@@ -1468,7 +1760,7 @@
           "V1UnderscorefileUnderscoreuploadLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "V1UnderscorefileUnderscoreuploadLambdaVersionHJJZ1bEyEhiSofwZMXNBWLlyPD4Ui9yyo5VWdKEU"
+              "Ref": "V1UnderscorefileUnderscoreuploadLambdaVersion0yrwzpO6DWxmFl4jy6WblAvygLbklKQABqUvx9eiio"
             },
             "Export": {
               "Name": "sls-task-management-service-production-V1UnderscorefileUnderscoreuploadLambdaFunctionQualifiedArn"
@@ -1477,7 +1769,7 @@
           "V1UnderscoretaskUnderscorecreateLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "V1UnderscoretaskUnderscorecreateLambdaVersionqqPqzoD9zYpvtGUdHItGArbgQ9zHjFGcy8luy3Tv0QE"
+              "Ref": "V1UnderscoretaskUnderscorecreateLambdaVersion4sKTOk0ctCl0vyAvBjxxnlr9eQnFYNbX6OmMivRV2dE"
             },
             "Export": {
               "Name": "sls-task-management-service-production-V1UnderscoretaskUnderscorecreateLambdaFunctionQualifiedArn"
@@ -1486,7 +1778,7 @@
           "V1UnderscoretaskUnderscorelistLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "V1UnderscoretaskUnderscorelistLambdaVersionjH4YYpgddMzwVt709UlWmDlsXmd4MXigpR2iPtpyWmg"
+              "Ref": "V1UnderscoretaskUnderscorelistLambdaVersion5R5omzhtwMeU3pVznQqE6hiHWeh4rsetwAEeGyY"
             },
             "Export": {
               "Name": "sls-task-management-service-production-V1UnderscoretaskUnderscorelistLambdaFunctionQualifiedArn"
@@ -1495,10 +1787,37 @@
           "V1UnderscoretaskUnderscoreupdateLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "V1UnderscoretaskUnderscoreupdateLambdaVersionXWwESqJPAIgdjhPEyhRmc1k57G56IquZobYkQCJRI"
+              "Ref": "V1UnderscoretaskUnderscoreupdateLambdaVersionwOcNfYKZ8BCJuFigT5EElb4a95De93P5DvNIHw1B4"
             },
             "Export": {
               "Name": "sls-task-management-service-production-V1UnderscoretaskUnderscoreupdateLambdaFunctionQualifiedArn"
+            }
+          },
+          "InternalUnderscoredocsLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "InternalUnderscoredocsLambdaVersiondBeGPbeBpXh6msyKRiVZEWB94q0Gb4YkNiwZi6ulJMg"
+            },
+            "Export": {
+              "Name": "sls-task-management-service-production-InternalUnderscoredocsLambdaFunctionQualifiedArn"
+            }
+          },
+          "InternalUnderscorehealthLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "InternalUnderscorehealthLambdaVersioneIDxMSouOegMSnfwevbrM1Iy23JTGhVL8mEQxv7EU"
+            },
+            "Export": {
+              "Name": "sls-task-management-service-production-InternalUnderscorehealthLambdaFunctionQualifiedArn"
+            }
+          },
+          "NotificationLambdaLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "NotificationLambdaLambdaVersionpt2iBV4OP2JfmBg32kkHNHtWDDxDyMK4HypWShto"
+            },
+            "Export": {
+              "Name": "sls-task-management-service-production-NotificationLambdaLambdaFunctionQualifiedArn"
             }
           },
           "HttpApiId": {
@@ -1563,7 +1882,7 @@
         "timeout": 6,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "S3ObjectCreatedEventFunctionLambdaVersionCemCsN80RFtRhYLfRdkm1QoY6p4GBBeHnxjegyOLQA"
+        "versionLogicalId": "S3ObjectCreatedEventFunctionLambdaVersion2XwKBCfjOPiTKz2lEwbapxjn1dH0cZrgkIPXAI"
       },
       "v1_auth_google_authorize": {
         "handler": "dist/routes/v1/auth/google/authorize.handler",
@@ -1583,7 +1902,7 @@
         "timeout": 6,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaVersioncqsRXEjirPDrINMfCSPckfmGLvoHPXDTRZNXBREZc"
+        "versionLogicalId": "V1UnderscoreauthUnderscoregoogleUnderscoreauthorizeLambdaVersionO0rmlDURUMpBUWDFGtUZpeuPFwZJGiJmKB2zRH2UA"
       },
       "v1_auth_google_refresh": {
         "handler": "dist/routes/v1/auth/google/refresh.handler",
@@ -1603,7 +1922,7 @@
         "timeout": 6,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaVersionSYtU4820K8K9GKxDwQIcyFJgjPOdTkYekpQjX7k"
+        "versionLogicalId": "V1UnderscoreauthUnderscoregoogleUnderscorerefreshLambdaVersionwE0S9e2PPRbk9dhCBkTHlywcANUnYzk7mNMFo0qBEE"
       },
       "v1_auth_google_revoke": {
         "handler": "dist/routes/v1/auth/google/revoke.handler",
@@ -1623,7 +1942,7 @@
         "timeout": 6,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaVersionKqiAkNRl3xYw9GN7gRVJX27RO04ZYm3koEN0mE8"
+        "versionLogicalId": "V1UnderscoreauthUnderscoregoogleUnderscorerevokeLambdaVersionmsukXK4Po2CrhD5E6RT3FJPu7Pnz6P70gaxau0Uo"
       },
       "v1_file_list": {
         "handler": "dist/routes/v1/file/list.handler",
@@ -1643,7 +1962,7 @@
         "timeout": 6,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "V1UnderscorefileUnderscorelistLambdaVersionoCVDWb8pz4APtE2XOKRJP7u3UaNtJDvOtVJOQp62xA"
+        "versionLogicalId": "V1UnderscorefileUnderscorelistLambdaVersiond0Q3b5G1rBquPP1y3USPo61UHYTfvkZwwy9Fcty1j5I"
       },
       "v1_file_upload": {
         "handler": "dist/routes/v1/file/upload.handler",
@@ -1663,7 +1982,7 @@
         "timeout": 6,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "V1UnderscorefileUnderscoreuploadLambdaVersionHJJZ1bEyEhiSofwZMXNBWLlyPD4Ui9yyo5VWdKEU"
+        "versionLogicalId": "V1UnderscorefileUnderscoreuploadLambdaVersion0yrwzpO6DWxmFl4jy6WblAvygLbklKQABqUvx9eiio"
       },
       "v1_task_create": {
         "handler": "dist/routes/v1/task/create.handler",
@@ -1683,7 +2002,7 @@
         "timeout": 6,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "V1UnderscoretaskUnderscorecreateLambdaVersionqqPqzoD9zYpvtGUdHItGArbgQ9zHjFGcy8luy3Tv0QE"
+        "versionLogicalId": "V1UnderscoretaskUnderscorecreateLambdaVersion4sKTOk0ctCl0vyAvBjxxnlr9eQnFYNbX6OmMivRV2dE"
       },
       "v1_task_list": {
         "handler": "dist/routes/v1/task/list.handler",
@@ -1703,7 +2022,7 @@
         "timeout": 6,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "V1UnderscoretaskUnderscorelistLambdaVersionjH4YYpgddMzwVt709UlWmDlsXmd4MXigpR2iPtpyWmg"
+        "versionLogicalId": "V1UnderscoretaskUnderscorelistLambdaVersion5R5omzhtwMeU3pVznQqE6hiHWeh4rsetwAEeGyY"
       },
       "v1_task_update": {
         "handler": "dist/routes/v1/task/update.handler",
@@ -1723,7 +2042,58 @@
         "timeout": 6,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "V1UnderscoretaskUnderscoreupdateLambdaVersionXWwESqJPAIgdjhPEyhRmc1k57G56IquZobYkQCJRI"
+        "versionLogicalId": "V1UnderscoretaskUnderscoreupdateLambdaVersionwOcNfYKZ8BCJuFigT5EElb4a95De93P5DvNIHw1B4"
+      },
+      "internal_docs": {
+        "handler": "dist/routes/internal/docs.handler",
+        "events": [
+          {
+            "httpApi": {
+              "method": "GET",
+              "path": "/internal/docs"
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/internal/docs"
+          }
+        ],
+        "name": "task-management-service-production-internal_docs",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs20.x",
+        "vpc": {},
+        "versionLogicalId": "InternalUnderscoredocsLambdaVersiondBeGPbeBpXh6msyKRiVZEWB94q0Gb4YkNiwZi6ulJMg"
+      },
+      "internal_health": {
+        "handler": "dist/routes/internal/health.handler",
+        "events": [
+          {
+            "httpApi": {
+              "method": "GET",
+              "path": "/internal/health"
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/internal/health"
+          }
+        ],
+        "name": "task-management-service-production-internal_health",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs20.x",
+        "vpc": {},
+        "versionLogicalId": "InternalUnderscorehealthLambdaVersioneIDxMSouOegMSnfwevbrM1Iy23JTGhVL8mEQxv7EU"
+      },
+      "NotificationLambda": {
+        "handler": "dist/lambda/stream/ddb-record-changed.handler",
+        "events": [],
+        "name": "task-management-service-production-NotificationLambda",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs20.x",
+        "vpc": {},
+        "versionLogicalId": "NotificationLambdaLambdaVersionpt2iBV4OP2JfmBg32kkHNHtWDDxDyMK4HypWShto"
       }
     },
     "resources": {
@@ -1829,7 +2199,10 @@
                   "WriteCapacityUnits": 5
                 }
               }
-            ]
+            ],
+            "StreamSpecification": {
+              "StreamViewType": "NEW_IMAGE"
+            }
           }
         },
         "FileInventoryBucket": {
@@ -1856,6 +2229,19 @@
               ]
             }
           }
+        },
+        "TaskNotificationTopic": {
+          "Type": "AWS::SNS::Topic",
+          "Properties": {
+            "TopicName": "task-notification-topic",
+            "DisplayName": "Task Notification Topic",
+            "Subscription": [
+              {
+                "Endpoint": "roy@reconlabs.ai",
+                "Protocol": "email"
+              }
+            ]
+          }
         }
       },
       "Outputs": {}
@@ -1870,12 +2256,20 @@
         "exclude": [
           "src/**",
           ".jest/**",
-          "node_modules/.pnpm/**"
+          "node_modules/.pnpm/**",
+          "scripts/**",
+          ".eslintrc.yaml",
+          ".gitignore",
+          "jest.config.ts",
+          "makefile",
+          "readme.md",
+          "tsconfig.json",
+          "yarn.lock"
         ],
         "artifactsS3KeyDirname": "serverless/task-management-service/production/code-artifacts",
         "deploymentBucket": "task-management-service-production-deployment-bucket",
         "artifact": "/Users/reconlabs/workspace/recon-assignment/.serverless/task-management-service.zip",
-        "artifactDirectoryName": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z"
+        "artifactDirectoryName": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z"
       },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
@@ -1895,7 +2289,7 @@
     "artifact": "/Users/reconlabs/workspace/recon-assignment/.serverless/task-management-service.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/task-management-service/production/1721379595449-2024-07-19T08:59:55.449Z",
+    "artifactDirectoryName": "serverless/task-management-service/production/1721710311049-2024-07-23T04:51:51.049Z",
     "artifact": "task-management-service.zip"
   }
 }

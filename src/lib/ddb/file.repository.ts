@@ -1,4 +1,4 @@
-import { randomId } from "../lib/util/index.js";
+import { randomId } from "../util/index.js";
 import { BaseDynamoDBClass } from "./base.repository.js";
 
 export interface FileRecord {

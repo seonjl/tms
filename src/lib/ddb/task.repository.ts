@@ -1,4 +1,4 @@
-import { randomId, removeUndefined } from "../lib/util/index.js";
+import { randomId, removeUndefined } from "../util/index.js";
 import { BaseDynamoDBClass } from "./base.repository.js";
 
 export interface TaskRecord {

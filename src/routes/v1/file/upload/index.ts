@@ -1,10 +1,10 @@
 import middy from "@middy/core";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
 import { FromSchema } from "json-schema-to-ts";
+import { getSinglePartPresignedUrl } from "../../../../lib/aws/s3.service.js";
 import { globalErrorHandler } from "../../../../lib/middlewares/global-error-handler.js";
 import { userFriendlyValidator } from "../../../../lib/middlewares/user-friendly.validator.js";
-import { getSinglePartPresignedUrl } from "../../../../lib/s3/s3.service.js";
-import { requestContextSchema } from "../../../../lib/util/index.js";
+import { randomId, requestContextSchema } from "../../../../lib/util/index.js";
 
 const bodySchema = {
   type: "object",
@@ -29,6 +29,25 @@ const responseSchema = {
   type: "object",
   properties: {
     url: { type: "string" },
+  },
+};
+
+export const apiSchema = {
+  path: "/v1/files/download",
+  method: "POST",
+  tags: ["File"],
+  summary: "File.download",
+  description: "Create a presigned url for download",
+  operationId: randomId({ prefix: "operation" }),
+  requestBody: {
+    required: true,
+    content: { "application/json": { schema: bodySchema } },
+  },
+  responses: {
+    200: {
+      description: "",
+      content: { "application/json": { schema: responseSchema } },
+    },
   },
 };
 
