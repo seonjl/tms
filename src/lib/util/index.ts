@@ -89,3 +89,47 @@ const formatVariables = (variables: Record<string, any>) => {
     .map(([key, value]) => `$${key}=${value}`)
     .join(", ");
 };
+
+export function querySchemaToParameters(querySchema: {
+  properties: Record<
+    string,
+    {
+      type: string;
+      description?: string;
+      example?: any;
+      enum?: readonly string[];
+    }
+  >;
+}) {
+  return Object.entries(querySchema.properties).map(([key, value]) => {
+    const { type, description, enum: _enum } = value;
+    return {
+      name: key,
+      in: "query",
+      required: false,
+      description,
+      schema: { type, enum: _enum },
+      example: value.example,
+      enum: value.enum,
+    };
+  });
+}
+
+export function pathSchemaToParameters(pathSchema: {
+  properties: Record<
+    string,
+    { type: string; description?: string; example?: any }
+  >;
+}) {
+  return Object.entries(pathSchema.properties).map(([key, value]) => {
+    const { type, description } = value;
+    return {
+      name: key,
+      in: "path",
+      required: true,
+      description,
+      schema: { type },
+      example: value.example,
+    };
+  });
+}

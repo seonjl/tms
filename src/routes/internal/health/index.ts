@@ -1,5 +1,5 @@
 import middy from "@middy/core";
-import httpErrorHandler from "@middy/http-error-handler";
+import { globalErrorHandler } from "../../../lib/middlewares/global-error-handler";
 
 export async function lambdaHandler() {
   return {
@@ -8,4 +8,4 @@ export async function lambdaHandler() {
   };
 }
 
-export const handler = middy().use(httpErrorHandler()).handler(lambdaHandler);
+export const handler = middy().use(globalErrorHandler()).handler(lambdaHandler);

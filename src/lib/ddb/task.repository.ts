@@ -19,7 +19,7 @@ export class TaskRepository extends BaseDynamoDBClass {
   }
 
   async listTasks({ user_email }: { user_email?: string }) {
-    return this.queryItems({
+    return this.queryItems<TaskRecord>({
       IndexName: "EntityTypeIndex",
       KeyConditionExpression:
         "#pk = :user_email AND #entity_type = :entity_type",
@@ -29,7 +29,7 @@ export class TaskRepository extends BaseDynamoDBClass {
       },
       ExpressionAttributeValues: {
         ":user_email": user_email,
-        ":entity_type": "task", // "TASK"와 같은 대문자를 사용하는 것이 좋습니다.
+        ":entity_type": "task",
       },
     });
   }
@@ -69,5 +69,9 @@ export class TaskRepository extends BaseDynamoDBClass {
         ":due_date": due_date,
       }),
     });
+  }
+
+  async deleteTask(user_email: string, task_id: string) {
+    return this.deleteItem({ pk: user_email, sk: task_id });
   }
 }

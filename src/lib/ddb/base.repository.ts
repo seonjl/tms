@@ -1,9 +1,5 @@
 // Importing necessary modules from AWS SDK
-import {
-  DynamoDBClient,
-  QueryCommand,
-  QueryCommandInput,
-} from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   DeleteCommand,
   DeleteCommandInput,
@@ -12,6 +8,8 @@ import {
   GetCommandInput,
   PutCommand,
   PutCommandInput,
+  QueryCommand,
+  QueryCommandInput,
   UpdateCommand,
   UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";

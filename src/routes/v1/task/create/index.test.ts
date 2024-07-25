@@ -18,7 +18,8 @@ describe("lambdaHandler", () => {
       requestContext: {
         authorizer: {
           lambda: {
-            email: faker.internet.email(),
+            email: "seonjl.dev@gmail.com",
+            // email: faker.internet.email(),
           },
         },
       },

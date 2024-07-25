@@ -1,7 +1,8 @@
 import middy from "@middy/core";
-import httpErrorHandler from "@middy/http-error-handler";
 import { FromSchema } from "json-schema-to-ts";
 import { FileRepository } from "../../../../lib/ddb/file.repository.js";
+import { globalErrorHandler } from "../../../../lib/middlewares/global-error-handler.js";
+import { ioLogger } from "../../../../lib/middlewares/io-logger.js";
 import { userFriendlyValidator } from "../../../../lib/middlewares/user-friendly.validator.js";
 import { requestContextSchema } from "../../../../lib/util/index.js";
 
@@ -49,11 +50,12 @@ export async function lambdaHandler(event: FromSchema<typeof eventSchema>) {
 
   return {
     statusCode: 200,
-    body: files,
+    body: JSON.stringify(files),
   };
 }
 
 export const handler = middy()
-  .use(httpErrorHandler())
+  .use(globalErrorHandler())
+  .use(ioLogger())
   .use(userFriendlyValidator({ eventSchema }))
   .handler(lambdaHandler);

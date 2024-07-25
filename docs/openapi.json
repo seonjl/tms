@@ -4,15 +4,21 @@
     "title": "API Documentation",
     "version": "1.0.0"
   },
+  "servers": [
+    {
+      "url": "https://p031vhv91a.execute-api.ap-northeast-2.amazonaws.com",
+      "description": "Stag API Server"
+    }
+  ],
   "paths": {
-    "/v1/files/download": {
-      "POST": {
+    "/v1/auth/google/authorize": {
+      "post": {
         "tags": [
-          "File"
+          "Auth"
         ],
-        "summary": "File.download",
-        "description": "Create a presigned url for download",
-        "operationId": "operation.2nvvjtk25v",
+        "summary": "Auth.google.authorize",
+        "description": "Google 회원가입/로그인을 처리한다. redirectUri 는 ${origin}/redirect/google",
+        "operationId": "googleAuthorize",
         "requestBody": {
           "required": true,
           "content": {
@@ -20,18 +26,191 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
+                  "code": {
                     "type": "string"
                   },
-                  "metadata": {
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "string"
-                    }
+                  "locale": {
+                    "type": "string"
                   }
                 },
                 "required": [
-                  "name"
+                  "code"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "refresh_token": {
+                      "type": "string"
+                    },
+                    "expires_in": {
+                      "type": "number"
+                    },
+                    "scope": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "access_token",
+                    "refresh_token",
+                    "expires_in",
+                    "scope",
+                    "token_type",
+                    "email"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/google/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Auth.google.refresh",
+        "description": "access_token 토큰을 갱신한다.",
+        "operationId": "e7dc84b7-9c56-42dc-ab7c-ce778d7851b3",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "refresh_token"
+                  }
+                },
+                "required": [
+                  "token"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "expires_in": {
+                      "type": "number"
+                    },
+                    "token_type": {
+                      "type": "string"
+                    },
+                    "scope": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/google/revoke": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Auth.google.revoke",
+        "description": "토큰을 폐기한다.",
+        "operationId": "bdc12d39-20cf-46e8-b27d-88f7bc660261",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "access_token or refresh_token"
+                  }
+                },
+                "required": [
+                  "token"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/files/download": {
+      "post": {
+        "tags": [
+          "File"
+        ],
+        "summary": "File.download",
+        "description": "Create a presigned url for download",
+        "operationId": "operation.sr98pp15v9",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file_id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file_id"
                 ],
                 "additionalProperties": false
               }
@@ -48,6 +227,265 @@
                   "properties": {
                     "url": {
                       "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Me.get",
+        "description": "Get my information",
+        "operationId": "getMe",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "email"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks": {
+      "post": {
+        "tags": [
+          "Task"
+        ],
+        "summary": "Task.create",
+        "description": "Create a task",
+        "operationId": "createTask",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Task"
+        ],
+        "summary": "Task.list",
+        "description": "List tasks",
+        "operationId": "listTasks",
+        "parameters": [
+          {
+            "name": "created_at>",
+            "in": "query",
+            "required": false,
+            "description": "생성일시",
+            "schema": {
+              "type": "string"
+            },
+            "example": "2024-06-01T00:00:00Z"
+          },
+          {
+            "name": "created_at<",
+            "in": "query",
+            "required": false,
+            "description": "생성일시",
+            "schema": {
+              "type": "string"
+            },
+            "example": "2024-07-01T00:00:00Z"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "user_email": {
+                        "type": "string"
+                      },
+                      "task_id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "task_status": {
+                        "type": "string"
+                      },
+                      "due_date": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "user_email",
+                      "task_id",
+                      "title",
+                      "description",
+                      "task_status",
+                      "due_date",
+                      "created_at"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{task_id}": {
+      "delete": {
+        "tags": [
+          "Task"
+        ],
+        "summary": "Task.delete",
+        "description": "Delete a task",
+        "operationId": "deleteTask",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Task"
+        ],
+        "summary": "Task.update",
+        "description": "Update a task",
+        "operationId": "updateTask",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "task_status": {
+                    "type": "string"
+                  },
+                  "due_date": {
+                    "type": "string"
+                  }
+                },
+                "required": [],
+                "additionalProperties": false,
+                "minProperties": 1
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "success"
                     }
                   }
                 }

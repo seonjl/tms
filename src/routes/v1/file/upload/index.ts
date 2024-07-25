@@ -1,10 +1,10 @@
 import middy from "@middy/core";
-import httpJsonBodyParser from "@middy/http-json-body-parser";
 import { FromSchema } from "json-schema-to-ts";
 import { getSinglePartPresignedUrl } from "../../../../lib/aws/s3.service.js";
 import { globalErrorHandler } from "../../../../lib/middlewares/global-error-handler.js";
+import { ioLogger } from "../../../../lib/middlewares/io-logger.js";
 import { userFriendlyValidator } from "../../../../lib/middlewares/user-friendly.validator.js";
-import { randomId, requestContextSchema } from "../../../../lib/util/index.js";
+import { requestContextSchema } from "../../../../lib/util/index.js";
 
 const bodySchema = {
   type: "object",
@@ -32,25 +32,6 @@ const responseSchema = {
   },
 };
 
-export const apiSchema = {
-  path: "/v1/files/download",
-  method: "POST",
-  tags: ["File"],
-  summary: "File.download",
-  description: "Create a presigned url for download",
-  operationId: randomId({ prefix: "operation" }),
-  requestBody: {
-    required: true,
-    content: { "application/json": { schema: bodySchema } },
-  },
-  responses: {
-    200: {
-      description: "",
-      content: { "application/json": { schema: responseSchema } },
-    },
-  },
-};
-
 export async function lambdaHandler(event: FromSchema<typeof eventSchema>) {
   const user_email = event.requestContext.authorizer.lambda.email;
   const { name, metadata } = event.body;
@@ -63,14 +44,14 @@ export async function lambdaHandler(event: FromSchema<typeof eventSchema>) {
 
   return {
     statusCode: 200,
-    body: {
+    body: JSON.stringify({
       url: url,
-    },
+    }),
   };
 }
 
 export const handler = middy()
   .use(globalErrorHandler())
-  .use(httpJsonBodyParser())
+  .use(ioLogger())
   .use(userFriendlyValidator({ eventSchema }))
   .handler(lambdaHandler);

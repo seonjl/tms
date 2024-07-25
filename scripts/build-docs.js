@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import fs from "fs";
 import yaml from "js-yaml";
 import path from "path";
@@ -35,25 +36,28 @@ function generatePathItemObject(apiSchema) {
     tags,
     summary,
     description,
-    operationId,
+    operationId = randomUUID(),
+    parameters,
     requestBody,
     responses,
   } = apiSchema;
 
+  const operationObject = {
+    tags,
+    summary,
+    description,
+    operationId,
+    parameters,
+    requestBody,
+    responses,
+  };
   const pathItem = {
     [path]: {
-      [method]: {
-        tags,
-        summary,
-        description,
-        operationId,
-        requestBody,
-        responses,
-      },
+      [method]: operationObject,
     },
   };
 
-  return pathItem;
+  return { path, method, operationObject, pathItem };
 }
 
 async function* importApiSchemas(targetFiles) {
@@ -124,25 +128,43 @@ async function main() {
       title: "API Documentation",
       version: "1.0.0",
     },
+    servers: [
+      {
+        url: "https://p031vhv91a.execute-api.ap-northeast-2.amazonaws.com",
+        description: "Stag API Server",
+      },
+    ],
     paths: {},
   };
 
-  const targetApiSchemas = [];
-  const paths = {};
+  const pathsObject = {};
 
   for await (const apiSchema of importApiSchemas(targetFiles)) {
     if (!apiSchema) {
       continue;
     }
 
-    const pathItem = generatePathItemObject(apiSchema);
-    Object.assign(paths, pathItem);
+    const { path, method, operationObject } = generatePathItemObject(apiSchema);
+
+    mergePathItemToPaths(pathsObject, { path, method, operationObject });
   }
 
-  openapiObject.paths = paths;
+  openapiObject.paths = pathsObject;
 
   await writeOpenapiJson(openapiObject);
   await writeOpenapiYamlAndHtml(openapiObject);
+}
+
+function mergePathItemToPaths(pathsObject, { path, method, operationObject }) {
+  if (pathsObject[path]) {
+    pathsObject[path][method] = operationObject;
+  } else {
+    pathsObject[path] = {
+      [method]: operationObject,
+    };
+  }
+
+  return pathsObject;
 }
 
 // iife

@@ -4,6 +4,7 @@ import { FromSchema } from "json-schema-to-ts";
 import { getDownloadPresignedUrl } from "../../../../lib/aws/s3.service.js";
 import { FileRepository } from "../../../../lib/ddb/file.repository.js";
 import { globalErrorHandler } from "../../../../lib/middlewares/global-error-handler.js";
+import { ioLogger } from "../../../../lib/middlewares/io-logger.js";
 import { userFriendlyValidator } from "../../../../lib/middlewares/user-friendly.validator.js";
 import { randomId, requestContextSchema } from "../../../../lib/util/index.js";
 
@@ -33,14 +34,15 @@ const responseSchema = {
   },
 };
 
+// prettier-ignore
 export const apiSchema = {
-  path: "/v1/files/download",
-  method: "POST",
-  tags: ["File"],
-  summary: "File.download",
-  description: "Create a presigned url for download",
-  operationId: randomId({ prefix: "operation" }),
-  requestBody: {
+  path        : "/v1/files/download",
+  method      : "post",
+  tags        : ["File"],
+  summary     : "File.download",
+  description : "Create a presigned url for download",
+  operationId : randomId({ prefix: "operation" }),
+  requestBody : {
     required: true,
     content: { "application/json": { schema: bodySchema } },
   },
@@ -70,14 +72,15 @@ export async function lambdaHandler(event: FromSchema<typeof eventSchema>) {
 
   return {
     statusCode: 200,
-    body: {
+    body: JSON.stringify({
       url: url,
-    },
+    }),
   };
 }
 
 export const handler = middy()
   .use(globalErrorHandler())
+  .use(ioLogger())
   .use(httpJsonBodyParser())
   .use(userFriendlyValidator({ eventSchema }))
   .handler(lambdaHandler);
