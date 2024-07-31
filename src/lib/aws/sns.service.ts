@@ -1,5 +1,6 @@
 import {
   PublishCommand,
+  PublishCommandInput,
   SNSClient,
   SubscribeCommand,
 } from "@aws-sdk/client-sns";
@@ -8,12 +9,9 @@ const snsClient = new SNSClient({
   region: process.env.AWS_REGION,
 });
 
-export const publish = async (topicArn: string, message: string) => {
+export const publish = async (PublishCommandInput: PublishCommandInput) => {
   const response = await snsClient.send(
-    new PublishCommand({
-      Message: message,
-      TopicArn: topicArn,
-    })
+    new PublishCommand(PublishCommandInput)
   );
 
   return response;

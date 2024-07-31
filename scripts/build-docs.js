@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import fs from "fs";
 import yaml from "js-yaml";
 import path from "path";
@@ -36,7 +35,7 @@ function generatePathItemObject(apiSchema) {
     tags,
     summary,
     description,
-    operationId = randomUUID(),
+    operationId,
     parameters,
     requestBody,
     responses,
@@ -46,7 +45,7 @@ function generatePathItemObject(apiSchema) {
     tags,
     summary,
     description,
-    operationId,
+    operationId: operationId || path + "-" + method,
     parameters,
     requestBody,
     responses,
@@ -130,7 +129,7 @@ async function main() {
     },
     servers: [
       {
-        url: "https://p031vhv91a.execute-api.ap-northeast-2.amazonaws.com",
+        url: "https://au7rseeb2k.execute-api.ap-northeast-2.amazonaws.com",
         description: "Stag API Server",
       },
     ],

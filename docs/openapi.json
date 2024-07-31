@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "https://p031vhv91a.execute-api.ap-northeast-2.amazonaws.com",
+      "url": "https://au7rseeb2k.execute-api.ap-northeast-2.amazonaws.com",
       "description": "Stag API Server"
     }
   ],
@@ -90,7 +90,7 @@
         ],
         "summary": "Auth.google.refresh",
         "description": "access_token 토큰을 갱신한다.",
-        "operationId": "e7dc84b7-9c56-42dc-ab7c-ce778d7851b3",
+        "operationId": "/v1/auth/google/refresh-post",
         "requestBody": {
           "required": true,
           "content": {
@@ -146,7 +146,7 @@
         ],
         "summary": "Auth.google.revoke",
         "description": "토큰을 폐기한다.",
-        "operationId": "bdc12d39-20cf-46e8-b27d-88f7bc660261",
+        "operationId": "/v1/auth/google/revoke-post",
         "requestBody": {
           "required": true,
           "content": {
@@ -194,7 +194,7 @@
         ],
         "summary": "File.download",
         "description": "Create a presigned url for download",
-        "operationId": "operation.sr98pp15v9",
+        "operationId": "operation.ybz1ey414a8",
         "requestBody": {
           "required": true,
           "content": {

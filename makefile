@@ -16,14 +16,13 @@ build-docs:
 	node scripts/build-docs.js
 
 deploy:
-	pnpm install
 	make build
 	make build-docs
-	make ci
 	serverless deploy --stage production --region ap-northeast-2  --aws-profile personal
-	pnpm install
 
-FUNCTION_NAME = v1_task_list
+FUNCTION_NAME = TMSDDBRecordChangedFunction
+FUNCTION_NAME = TaskChangedNotificationFunction
+
 target:
 	make build
 	serverless deploy function --function $(FUNCTION_NAME) --stage production --region ap-northeast-2  --aws-profile personal --force

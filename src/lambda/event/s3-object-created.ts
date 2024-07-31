@@ -51,7 +51,8 @@ export async function handler(event: TEvent) {
   const recordPromises = event.Records.map(async (record, index) => {
     const bucket = event.Records[0].s3.bucket.name;
     const key = event.Records[0].s3.object.key;
-    const [user_email, name] = key.split("/");
+    const [encoded_user_email, name] = key.split("/");
+    const user_email = decodeURIComponent(encoded_user_email);
 
     await fileRepository.createFile(user_email, {
       name: name!,

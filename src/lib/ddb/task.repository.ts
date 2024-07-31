@@ -9,6 +9,7 @@ export interface TaskRecord {
   description: string;
   task_status: string;
   due_date: string;
+  related_users: string[];
   created_at: string;
   updated_at: string;
 }

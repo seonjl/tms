@@ -10,6 +10,8 @@ import {
   PutCommandInput,
   QueryCommand,
   QueryCommandInput,
+  ScanCommand,
+  ScanCommandInput,
   UpdateCommand,
   UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";
@@ -125,6 +127,21 @@ export class BaseDynamoDBClass {
       return response.Items as T[];
     } catch (error) {
       console.error("Error querying items:", error);
+      throw error;
+    }
+  }
+
+  async scanItems<T>(query: Omit<ScanCommandInput, "TableName">) {
+    const params: ScanCommandInput = {
+      TableName: this.tableName,
+      ...query,
+    };
+
+    try {
+      const response = await this.docClient.send(new ScanCommand(params));
+      return response.Items as T[];
+    } catch (error) {
+      console.error("Error scanning items:", error);
       throw error;
     }
   }

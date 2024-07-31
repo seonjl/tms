@@ -1,4 +1,5 @@
 import middy from "@middy/core";
+import jsonBodyParser from "@middy/http-json-body-parser";
 import { FromSchema } from "json-schema-to-ts";
 import { getSinglePartPresignedUrl } from "../../../../lib/aws/s3.service.js";
 import { globalErrorHandler } from "../../../../lib/middlewares/global-error-handler.js";
@@ -53,5 +54,6 @@ export async function lambdaHandler(event: FromSchema<typeof eventSchema>) {
 export const handler = middy()
   .use(globalErrorHandler())
   .use(ioLogger())
+  .use(jsonBodyParser())
   .use(userFriendlyValidator({ eventSchema }))
   .handler(lambdaHandler);

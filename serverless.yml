@@ -1,4 +1,4 @@
-service: task-management-service
+service: tms
 frameworkVersion: "3"
 
 package:
@@ -39,6 +39,12 @@ provider:
                 - "/"
                 - - Fn::GetAtt: [TMSSystemTable, Arn]
                   - "index/*"
+            - Fn::GetAtt: [websocketTable, Arn]
+        - Effect: Allow
+          Action:
+            - sns:Publish
+          Resource:
+            - Ref: TaskChangedNotificationTopic
   environment:
     stage: ${opt:stage, self:provider.stage}
   httpApi:
@@ -120,7 +126,7 @@ resources:
     FileInventoryBucket:
       Type: "AWS::S3::Bucket"
       Properties:
-        BucketName: "file-inventory-bucket-yaho"
+        BucketName: "file-inventory-bucket-self"
         AccessControl: "Private"
         VersioningConfiguration:
           Status: "Enabled"
@@ -135,23 +141,70 @@ resources:
               Status: "Enabled"
               ExpirationInDays: 30 # 30일 후 파일 삭제
 
-    TaskNotificationTopic:
+    TaskChangedNotificationTopic:
       Type: "AWS::SNS::Topic"
       Properties:
-        TopicName: "task-notification-topic"
-        DisplayName: "Task Notification Topic"
-        Subscription:
-          - Endpoint: "roy@reconlabs.ai"
-            Protocol: "email"
+        TopicName: "task-changed-notification-topic"
+        DisplayName: "TaskChangedNotificationTopic"
+
+    TaskChangedNotificationQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "task-changed-notification-queue"
+        MessageRetentionPeriod: 86400
+        RedrivePolicy:
+          deadLetterTargetArn: !GetAtt TaskChangedNotificationDLQ.Arn
+          maxReceiveCount: 5
+
+    TaskChangedNotificationDLQ:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "task-changed-notification-dlq"
+        VisibilityTimeout: 300
+        MessageRetentionPeriod: 86400
+
+    TaskChangedNotificationSubscription:
+      Type: "AWS::SNS::Subscription"
+      Properties:
+        Protocol: "sqs"
+        TopicArn: !Ref TaskChangedNotificationTopic
+        Endpoint: !GetAtt TaskChangedNotificationQueue.Arn
+
+    websocketTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "websocketTable"
+        AttributeDefinitions:
+          - AttributeName: "connectionId"
+            AttributeType: "S"
+          - AttributeName: "user_email"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "connectionId"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        GlobalSecondaryIndexes:
+          - IndexName: "userEmailIndex"
+            KeySchema:
+              - AttributeName: "user_email"
+                KeyType: "HASH"
+            Projection:
+              ProjectionType: "ALL"
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5
 
 functions:
   s3ObjectCreatedEventFunction:
-    handler: dist/lambda/event/s3-object-created/index.handler
+    handler: dist/lambda/event/s3-object-created.handler
     events:
       - s3:
           bucket: !Ref FileInventoryBucket
           event: s3:ObjectCreated:*
           existing: true
+
   v1_auth_google_authorize:
     handler: dist/routes/v1/auth/google/authorize/index.handler
     events:
@@ -254,5 +307,38 @@ functions:
   internal_authorizer:
     handler: dist/lambda/authorizer/index.handler
 
-  NotificationLambda:
-    handler: dist/lambda/stream/ddb-record-changed/index.handler
+  websocket_connect:
+    handler: dist/lambda/websocket/index.handler
+    events:
+      - websocket:
+          route: $connect
+  websocet_disconnect:
+    handler: dist/lambda/websocket/index.handler
+    events:
+      - websocket:
+          route: $disconnect
+  websocket_default:
+    handler: dist/lambda/websocket/index.handler
+    events:
+      - websocket:
+          route: $default
+
+  TMSDDBRecordChangedFunction:
+    handler: dist/lambda/stream/ddb-record-changed.handler
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt:
+              - TMSSystemTable
+              - StreamArn
+          batchSize: 1
+          startingPosition: LATEST
+  TaskChangedNotificationFunction:
+    handler: dist/lambda/queue/task-noti-consume.handler
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - TaskChangedNotificationQueue
+              - Arn
